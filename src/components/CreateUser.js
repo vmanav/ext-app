@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 class CreateUser extends Component {
     constructor(props) {
@@ -22,13 +23,17 @@ class CreateUser extends Component {
     handleFormSubmit(event) {
         event.preventDefault();
 
-        const user = {
+        const newUser = {
             username: this.state.username,
         }
-        console.log("New USER => ", user);
+        console.log("New USER => ", newUser);
 
-        // WILLSAVE NEW USER HERE I GUESS
-
+        // CREATING POST REQUESTto backend  
+        axios.post('http://localhost:5000/users/add', newUser)
+            .then((res) => {
+                console.log("res => ", res);
+                console.log(res.data);
+            });
         // NOTE : 
         // Now, After someone has added a user,
         // we will set the state to null again if someone eants to add more users

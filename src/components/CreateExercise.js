@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -22,35 +23,45 @@ class CreateExercise extends Component {
     }
 
     componentDidMount() {
-        this.setState({
-            users: ['test user'],
-            username: 'test user'
-        })
+
+        axios.get('http://localhost:5000/users')
+            .then((res) => {
+                console.log("res => ", res);
+                console.log("res => ", res.data);
+                if (res.data.length > 0) {
+                    // Atleast 1 user in db
+                    const usernamesList = res.data.map((userObj) => userObj.username);
+                    console.log("List of Usernames available : ", usernamesList);
+                    this.setState({
+                        users: usernamesList,
+                        username: usernamesList[0]
+                    })
+
+                }
+            })
+
+
     }
 
     handleUsernameChange(event) {
-        console.log("onChange Handler function INCOKED");
         this.setState({
             username: event.target.value
         })
     }
 
     handleDescriptionChange(event) {
-        console.log("onChange Handler function INCOKED");
         this.setState({
             description: event.target.value
         })
     }
 
     handlDurationChange(event) {
-        console.log("onChange Handler function INCOKED");
         this.setState({
             duration: event.target.value
         })
     }
 
     handleDateChange(newDate) {
-        console.log("onChange Handler function INCOKED");
         this.setState({
             date: newDate,
         })
@@ -59,13 +70,20 @@ class CreateExercise extends Component {
     handleFormSubmit(event) {
         event.preventDefault();
 
-        const exercise = {
+        const newExercise = {
             username: this.state.username,
             description: this.state.description,
             duration: this.state.duration,
             date: this.state.date,
         }
-        console.log("New Exercise => ", exercise);
+        console.log("New Exercise => ", newExercise);
+
+        // making POST REQUEST to backend  
+        axios.post('http://localhost:5000/exercises/add', newExercise)
+            .then((res) => {
+                console.log("res => ", res);
+                console.log(res.data);
+            });
 
         window.location = '/';
     }
