@@ -24,6 +24,4 @@ const exerciseSchema = new mongoose.Schema({
 const Exercise = mongoose.model('Exercise', exerciseSchema, 'exercises');
 // 'exercises' -> Collection Name
 
-module.exports = {
-    Exercise
-}
+module.exports = Exercise;
